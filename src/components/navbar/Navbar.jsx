@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { RiHome2Line } from "react-icons/ri";
 import { ImStatsDots } from "react-icons/im";
 import { CiClock2 } from "react-icons/ci";
@@ -14,7 +15,7 @@ const navigation = [
 ];
 
 export default function Navbar() {
-    const [active, setActive] = useState("home");
+    const pathname = usePathname();
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -31,13 +32,12 @@ export default function Navbar() {
                 <div className="hidden md:flex gap-3">
                     {navigation.map((item) => {
                         const Icon = item.icon;
-                        const isActive = active === item.id;
+                        const isActive = pathname === item.path;
 
                         return (
                             <Link
                                 key={item.id}
                                 href={item.path}
-                                onClick={() => setActive(item.id)}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
                                     isActive ? "bg-[#244D3F] text-white" : "text-gray-700 hover:bg-gray-100"
                                 }`}
@@ -51,21 +51,19 @@ export default function Navbar() {
             </div>
 
             <div
-                className={`absolute  mt-3 w-48 bg-amber-200 shadow-lg rounded-lg flex flex-col gap-1 p-2 md:hidden transition-all duration-300 right-[3%]
-        ${isOpen ? "top-[50%]" : "-top-40"}`}
+                className={`absolute mt-3 w-48 bg-amber-200 shadow-lg rounded-lg flex flex-col gap-1 p-2 md:hidden transition-all duration-300 right-[3%] ${
+                    isOpen ? "top-[50%]" : "-top-40"
+                }`}
             >
                 {navigation.map((item) => {
                     const Icon = item.icon;
-                    const isActive = active === item.id;
+                    const isActive = pathname === item.path;
 
                     return (
                         <Link
                             key={item.id}
                             href={item.path}
-                            onClick={() => {
-                                setActive(item.id);
-                                setIsOpen(false);
-                            }}
+                            onClick={() => setIsOpen(false)}
                             className={`flex items-center gap-2 px-3 py-2 rounded-md ${
                                 isActive ? "bg-[#244D3F] text-white" : "text-gray-700 hover:bg-gray-100"
                             }`}
