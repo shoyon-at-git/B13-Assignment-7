@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Friend = ({ friend }) => {
   return (
-    <Link href={`${friend.id}`} className=" rounded-lg p-4 flex flex-col items-center gap-2 shadow-2xl hover:shadow-md transition">
+    <Link href={`friends/${friend.id}`} className=" rounded-lg p-4 flex flex-col items-center gap-2 shadow-2xl hover:shadow-md transition">
       
       <Image
         src={friend.picture}
