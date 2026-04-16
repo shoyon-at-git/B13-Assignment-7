@@ -5,6 +5,7 @@ export const FriendContext = createContext();
 
 const FriendProvider = ({ children }) => {
   const [friends, setFriends] = useState([]);
+  const [timelineEvents, setTimelineEvents] = useState([]);
 
   useEffect(() => {
     fetch("/data/friend.json")
@@ -12,8 +13,37 @@ const FriendProvider = ({ children }) => {
       .then((data) => setFriends(data));
   }, []);
 
+  useEffect(() => {
+    const storedEvents = localStorage.getItem("timelineEvents");
+    if (storedEvents) {
+      setTimelineEvents(JSON.parse(storedEvents));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("timelineEvents", JSON.stringify(timelineEvents));
+  }, [timelineEvents]);
+
+  const addTimelineEvent = ({ type, friendId, friendName }) => {
+    const newEvent = {
+      id: Date.now(),
+      type,
+      friendId,
+      friendName,
+      createdAt: new Date().toISOString(),
+    };
+
+    setTimelineEvents((prev) => [newEvent, ...prev]);
+  };
+
   return (
-    <FriendContext.Provider value={{ friends }}>
+    <FriendContext.Provider
+      value={{
+        friends,
+        timelineEvents,
+        addTimelineEvent,
+      }}
+    >
       {children}
     </FriendContext.Provider>
   );

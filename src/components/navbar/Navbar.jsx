@@ -51,7 +51,7 @@ export default function Navbar() {
             </div>
 
             <div
-                className={`absolute mt-3 w-48 bg-amber-200 shadow-lg rounded-lg flex flex-col gap-1 p-2 md:hidden transition-all duration-300 right-[3%] ${
+                className={`absolute z-10 mt-3 w-48 bg-amber-200 shadow-lg rounded-lg flex flex-col gap-1 p-2 md:hidden transition-all duration-300 right-[3%] ${
                     isOpen ? "top-[50%]" : "-top-40"
                 }`}
             >

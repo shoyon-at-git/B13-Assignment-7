@@ -8,10 +8,11 @@ import { GoArchive, GoDeviceCameraVideo } from "react-icons/go";
 import { RiDeleteBinLine, RiNotificationSnoozeLine } from "react-icons/ri";
 import { FiPhoneCall } from "react-icons/fi";
 import { LuMessageSquareMore } from "react-icons/lu";
+import { toast } from "react-toastify";
 
 const FriendDetailsPage = () => {
     const { id } = useParams();
-    const { friends } = useContext(FriendContext);
+    const { friends, addTimelineEvent } = useContext(FriendContext);
 
     const friend = friends.find((f) => f.id === Number(id));
 
@@ -28,6 +29,21 @@ const FriendDetailsPage = () => {
         day: "numeric",
         year: "numeric",
     });
+
+    const handleQuickCheckIn = (type) => {
+  addTimelineEvent({
+    type,
+    friendId: friend.id,
+    friendName: friend.name,
+  });
+  if (type === "call") {
+  toast.success(`📞 Call logged with ${friend.name}`);
+} else if (type === "text") {
+  toast.success(`💬 Text sent to ${friend.name}`);
+} else {
+  toast.success(`🎥 Video call with ${friend.name}`);
+}
+};
 
     return (
         <div className="w-11/12 max-w-4xl mx-auto mt-6 md:mt-8 lg:mt-10 flex flex-col gap-5">
@@ -123,17 +139,17 @@ const FriendDetailsPage = () => {
                     <h1 className="text-lg font-semibold text-gray-600 mb-3">Quick Check-In</h1>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:flex lg:justify-between">
-                        <div className="bg-[#e9e9e9] rounded-lg py-4 px-6 lg:px-13 flex flex-col items-center justify-center gap-1 cursor-pointer shadow-sm">
+                        <div onClick={() => handleQuickCheckIn("call")} className="bg-[#e9e9e9] rounded-lg py-4 px-6 lg:px-13 flex flex-col items-center justify-center gap-1 cursor-pointer shadow-sm">
                             <FiPhoneCall size={24} />
                             <p className="text-sm">Call</p>
                         </div>
 
-                        <div className="bg-[#e9e9e9] rounded-lg py-4 px-6 lg:px-13 flex flex-col items-center justify-center gap-1 cursor-pointer shadow-sm">
+                        <div onClick={() => handleQuickCheckIn("text")} className="bg-[#e9e9e9] rounded-lg py-4 px-6 lg:px-13 flex flex-col items-center justify-center gap-1 cursor-pointer shadow-sm">
                             <LuMessageSquareMore size={24} />
                             <p className="text-sm">Text</p>
                         </div>
 
-                        <div className="bg-[#e9e9e9] rounded-lg py-4 px-6 lg:px-13 flex flex-col items-center justify-center gap-1 cursor-pointer shadow-sm">
+                        <div onClick={() => handleQuickCheckIn("video")} className="bg-[#e9e9e9] rounded-lg py-4 px-6 lg:px-13 flex flex-col items-center justify-center gap-1 cursor-pointer shadow-sm">
                             <GoDeviceCameraVideo size={24} />
                             <p className="text-sm">Video</p>
                         </div>
