@@ -2,10 +2,9 @@
 
 import { useContext, useState } from "react";
 import { FriendContext } from "@/context/FriendContext";
-import { FiPhoneCall } from "react-icons/fi";
 import { LuMessageSquareMore } from "react-icons/lu";
 import { GoDeviceCameraVideo } from "react-icons/go";
-import { toast } from "react-toastify";
+import { FiPhoneCall } from "react-icons/fi";
 
 const TimelinePage = () => {
   const { timelineEvents } = useContext(FriendContext);
@@ -17,9 +16,10 @@ const TimelinePage = () => {
       : timelineEvents.filter((item) => item.type === filterType);
 
   const getIcon = (type) => {
-    if (type === "call") return "📞";
-    if (type === "text") return <LuMessageSquareMore></LuMessageSquareMore>;
-    if (type === "video") return "📽️";
+    if (type === "call") return <FiPhoneCall />;
+    if (type === "text") return <LuMessageSquareMore />;
+    if (type === "video") return <GoDeviceCameraVideo />;
+    return "🕒";
   };
 
   const getTitle = (type, friendName) => {
@@ -52,27 +52,40 @@ const TimelinePage = () => {
         <option value="video">Video</option>
       </select>
 
-      <div className="space-y-4">
-        {filteredEvents.map((event) => (
-          <div
-            key={event.id}
-            className="flex items-center gap-4 border border-gray-200 rounded-lg p-4 bg-white shadow-sm"
-          >
-            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-              {getIcon(event.type)}
-            </div>
-
-            <div>
-              <h2 className="font-semibold">
-                {getTitle(event.type, event.friendName)}
-              </h2>
-              <p className="text-sm text-gray-500">
-                {formatDate(event.createdAt)}
-              </p>
-            </div>
+      {filteredEvents.length === 0 ? (
+        <div className="flex flex-col items-center justify-center text-center border border-gray-200 rounded-lg bg-white shadow-sm py-16 px-6">
+          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-3xl mb-4">
+            🕒
           </div>
-        ))}
-      </div>
+          <h2 className="text-xl font-semibold mb-2">No timeline activity yet</h2>
+          <p className="text-sm text-gray-500 max-w-md">
+            Calls, texts, and video interactions with your friends will appear
+            here once they happen.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-4 pb-10">
+          {filteredEvents.map((event) => (
+            <div
+              key={event.id}
+              className="flex items-center gap-4 border border-gray-200 rounded-lg p-4 bg-white shadow-sm"
+            >
+              <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-xl">
+                {getIcon(event.type)}
+              </div>
+
+              <div>
+                <h2 className="font-semibold">
+                  {getTitle(event.type, event.friendName)}
+                </h2>
+                <p className="text-sm text-gray-500">
+                  {formatDate(event.createdAt)}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

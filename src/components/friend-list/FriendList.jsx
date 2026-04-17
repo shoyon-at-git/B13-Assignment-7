@@ -21,7 +21,7 @@ const FriendList = () => {
   }
 
   return (
-    <div className="max-w-277.5 mx-auto pb-4">
+    <div className="max-w-277.5 mx-auto pb-14 ">
       <h1 className="pt-10 mb-4 font-semibold text-2xl text-left">
         Your Friends
       </h1>
