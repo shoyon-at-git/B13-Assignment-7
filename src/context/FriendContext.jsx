@@ -6,12 +6,20 @@ export const FriendContext = createContext();
 const FriendProvider = ({ children }) => {
   const [friends, setFriends] = useState([]);
   const [timelineEvents, setTimelineEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+  setTimeout(() => {
     fetch("/data/friend.json")
       .then((res) => res.json())
-      .then((data) => setFriends(data));
-  }, []);
+      .then((data) => {
+        setFriends(data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, 2000);
+}, []);
 
   useEffect(() => {
     const storedEvents = localStorage.getItem("timelineEvents");
@@ -42,6 +50,7 @@ const FriendProvider = ({ children }) => {
         friends,
         timelineEvents,
         addTimelineEvent,
+        loading,
       }}
     >
       {children}
